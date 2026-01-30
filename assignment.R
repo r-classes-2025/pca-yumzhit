@@ -24,10 +24,11 @@ friends_tokens <- friends |>
 # 3. отберите по 500 самых частотных слов для каждого персонажа
 # посчитайте относительные частотности для слов
 friends_tf <- friends_tokens |>
-  count(speaker, word, sort = TRUE) |>
+  count(speaker, word) |>
   group_by(speaker) |>
-  slice_max(n, n = 500, with_ties = FALSE) |>
   mutate(tf = n / sum(n)) |>
+  arrange(desc(n), word, .by_group = TRUE) |>
+  slice_head(n = 500) |>
   ungroup() |>
   select(speaker, word, tf)
 
@@ -43,7 +44,6 @@ friends_tf_wide <- friends_tf |>
 set.seed(123)
 km.out <- kmeans(scale(friends_tf_wide), centers = 3, nstart = 20)
 
-
 # 6. примените к матрице метод главных компонент (prcomp)
 # центрируйте и стандартизируйте, использовав аргументы функции
 pca_fit <- prcomp(friends_tf_wide, center = TRUE, scale. = TRUE)
@@ -56,13 +56,12 @@ pca_fit <- prcomp(friends_tf_wide, center = TRUE, scale. = TRUE)
 
 q <- fviz_pca_biplot(
   pca_fit,
-  geom = c("text"),
-  habillage = as.factor(km.out$cluster),
+  geom.ind   = "text",
+  habillage  = km.out$cluster,
   select.var = list(cos2 = 20),
-  repel = TRUE,
-  ggtheme = theme_minimal()
-) +
-  theme(legend.position = "none")
+  repel      = FALSE
+)
+
 
 
  
