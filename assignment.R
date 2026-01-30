@@ -60,5 +60,3 @@ q <- fviz_pca_biplot(
   select.var = list(cos2 = 20),
   repel      = FALSE
 )
-
- 
