@@ -40,8 +40,7 @@ friends_tf_wide <- friends_tf |>
 # 5. установите зерно 123
 # проведите кластеризацию k-means (k = 3) на относительных значениях частотности (nstart = 20)
 # используйте scale()
-
-# ваш код здесь
+set.seed(123)
 km.out <- kmeans(scale(friends_tf_wide), centers = 3, nstart = 20)
 
 
@@ -65,5 +64,5 @@ q <- fviz_pca_biplot(
 ) +
   theme(legend.position = "none")
 
- q
+
  
