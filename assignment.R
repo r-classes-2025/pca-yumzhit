@@ -15,10 +15,11 @@ top_speakers <- friends |>
 # токенизируйте их реплики, удалите из них цифры
 # столбец с токенами должен называться word
 # оставьте только столбцы speaker, word
-friends_tokens <- friends |> 
+friends_tokens <- friends |>
   filter(speaker %in% top_speakers) |>
   unnest_tokens(word, text) |>
-  filter(!str_detect(word, "\\d")) |>
+  mutate(word = str_remove_all(word, "\\d+")) |>
+  filter(word != "") |>
   select(speaker, word)
 
 # 3. отберите по 500 самых частотных слов для каждого персонажа
@@ -60,3 +61,5 @@ q <- fviz_pca_biplot(
   select.var = list(cos2 = 20),
   repel      = FALSE
 )
+
+
